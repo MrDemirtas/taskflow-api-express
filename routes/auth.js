@@ -11,7 +11,7 @@ module.exports = router;
  * @swagger
  * /api/auth/register:
  *   post:
- *     summary: Yeni kullanıcı oluştur
+ *     summary: Yeni kullanıcı oluşturur
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -37,7 +37,7 @@ module.exports = router;
  * @swagger
  * /api/auth/login:
  *   post:
- *     summary: Kullanıcı girişi
+ *     summary: Kullanıcı girişi yapar
  *     tags: [Auth]
  *     requestBody:
  *       required: true

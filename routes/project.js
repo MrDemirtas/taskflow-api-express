@@ -1,11 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {
-  getProjects,
-  createProject,
-  updateProject,
-  deleteProject,
-} = require("../controllers/projectController");
+const { getProjects, createProject, updateProject, deleteProject } = require("../controllers/projectController");
 
 const protect = require("../middleware/auth");
 
@@ -22,7 +17,7 @@ module.exports = router;
  * @swagger
  * /api/projects:
  *   get:
- *     summary: Tüm projeleri getir
+ *     summary: Tüm projeleri getirir
  *     description: Tüm projeleri getirir
  *     tags:
  *       - Projects

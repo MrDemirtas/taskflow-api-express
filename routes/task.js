@@ -17,7 +17,7 @@ module.exports = router;
  * @swagger
  * /api/tasks:
  *   get:
- *     summary: Tüm görevleri getir
+ *     summary: Tüm görevleri getirir
  *     tags: [Tasks]
  *     security:
  *       - bearerAuth: []
@@ -77,7 +77,7 @@ module.exports = router;
  * @swagger
  * /api/tasks:
  *   post:
- *     summary: Yeni görev oluştur
+ *     summary: Yeni görev oluşturur
  *     tags: [Tasks]
  *     security:
  *       - bearerAuth: []
@@ -95,16 +95,12 @@ module.exports = router;
  *               description:
  *                 type: string
  *               status:
- *                 enum:
- *                   - todo
- *                   - in-progress
- *                   - done
+ *                 type: string
+ *                 enum: [todo, in-progress, done]
  *                 default: todo
  *               priority:
- *                 enum:
- *                   - low
- *                   - medium
- *                   - high
+ *                 type: string
+ *                 enum: [low, medium, high]
  *                 default: medium
  *               estimateHours:
  *                 type: number
@@ -126,7 +122,7 @@ module.exports = router;
  * @swagger
  * /api/tasks/{id}:
  *   put:
- *     summary: Görevi güncelle
+ *     summary: Görevi günceller
  *     tags: [Tasks]
  *     security:
  *       - bearerAuth: []
@@ -149,16 +145,12 @@ module.exports = router;
  *               description:
  *                 type: string
  *               status:
- *                 enum:
- *                   - todo
- *                   - in-progress
- *                   - done
+ *                 type: string
+ *                 enum: [todo, in-progress, done]
  *                 default: todo
  *               priority:
- *                 enum:
- *                   - low
- *                   - medium
- *                   - high
+ *                 type: string
+ *                 enum: [low, medium, high]
  *                 default: medium
  *               estimateHours:
  *                 type: number
@@ -182,7 +174,7 @@ module.exports = router;
  * @swagger
  * /api/tasks/{id}:
  *   delete:
- *     summary: Görevi sil
+ *     summary: Görevi siler
  *     tags: [Tasks]
  *     security:
  *       - bearerAuth: []
