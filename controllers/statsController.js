@@ -12,10 +12,87 @@ exports.getStatusDistribution = async (req, res) => {
   });
 };
 
-// 2. Kullanıcı İş Yükü (Toplam görev sayısı)
+// 2. Kullanıcı İş Yükü (Günlük, Haftalık, Aylık, Yıllık, Toplam)
 exports.getUserWorkload = async (req, res) => {
-  const total = await Task.countDocuments({ owner: req.user._id });
-  res.json({ total });
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const thisYearDate = new Date(now);
+  thisYearDate.setFullYear(now.getFullYear());
+  thisYearDate.setMonth(0);
+  thisYearDate.setDate(1);
+  thisYearDate.setHours(0, 0, 0, 0);
+  const thisMonthDate = new Date(now);
+  thisMonthDate.setMonth(now.getMonth());
+  thisMonthDate.setDate(1);
+  thisMonthDate.setHours(0, 0, 0, 0);
+  const thisWeekDate = new Date(now);
+  thisWeekDate.setDate(now.getDate() - now.getDay());
+  thisWeekDate.setHours(0, 0, 0, 0);
+
+  const thisDay = await Task.find({
+    owner: req.user._id,
+    createdAt: { $gte: now, $lte: new Date(now).setHours(23, 59, 59, 999) },
+  });
+  const thisWeek = await Task.find({
+    owner: req.user._id,
+    createdAt: { $gte: thisWeekDate, $lte: new Date(now).setHours(23, 59, 59, 999) },
+  });
+  const thisMonth = await Task.find({
+    owner: req.user._id,
+    createdAt: { $gte: thisMonthDate, $lte: new Date(now).setHours(23, 59, 59, 999) },
+  });
+  const thisYear = await Task.find({
+    owner: req.user._id,
+    createdAt: { $gte: thisYearDate, $lte: new Date(now).setHours(23, 59, 59, 999) },
+  });
+
+  const total = await Task.find({ owner: req.user._id });
+  const totalCompleted = total.filter((task) => task.status === "done").length;
+  const totalNotCompleted = total.filter((task) => task.status !== "done").length;
+
+  const thisDayCompleted = thisDay.filter((task) => task.status === "done").length;
+  const thisDayNotCompleted = thisDay.filter((task) => task.status !== "done").length;
+  const thisWeekCompleted = thisWeek.filter((task) => task.status === "done").length;
+  const thisWeekNotCompleted = thisWeek.filter((task) => task.status !== "done").length;
+  const thisMonthCompleted = thisMonth.filter((task) => task.status === "done").length;
+  const thisMonthNotCompleted = thisMonth.filter((task) => task.status !== "done").length;
+  const thisYearCompleted = thisYear.filter((task) => task.status === "done").length;
+  const thisYearNotCompleted = thisYear.filter((task) => task.status !== "done").length;
+
+  res.json({
+    workload: {
+      thisDay: {
+        completed: thisDayCompleted,
+        notCompleted: thisDayNotCompleted,
+        percentage: ((thisDayCompleted / thisDayNotCompleted) * 100).toFixed(2),
+        count: thisDayCompleted + thisDayNotCompleted,
+      },
+      thisWeek: {
+        completed: thisWeekCompleted,
+        notCompleted: thisWeekNotCompleted,
+        percentage: ((thisWeekCompleted / thisWeekNotCompleted) * 100).toFixed(2),
+        count: thisWeekCompleted + thisWeekNotCompleted,
+      },
+      thisMonth: {
+        completed: thisMonthCompleted,
+        notCompleted: thisMonthNotCompleted,
+        percentage: ((thisMonthCompleted / thisMonthNotCompleted) * 100).toFixed(2),
+        count: thisMonthCompleted + thisMonthNotCompleted,
+      },
+      thisYear: {
+        completed: thisYearCompleted,
+        notCompleted: thisYearNotCompleted,
+        percentage: ((thisYearCompleted / thisYearNotCompleted) * 100).toFixed(2),
+        count: thisYearCompleted + thisYearNotCompleted,
+      },
+    },
+    total: {
+      completed: totalCompleted,
+      notCompleted: totalNotCompleted,
+      percentage: ((totalCompleted / totalNotCompleted) * 100).toFixed(2),
+      count: totalCompleted + totalNotCompleted,
+    },
+  });
 };
 
 // 3. Ortalama Tamamlama Süresi
@@ -66,7 +143,7 @@ exports.getCompletedTaskWeekly = async (req, res) => {
   ]);
 
   res.json({
-    data,
+    completedWeekly: data,
     weeklyCount: data.reduce((sum, item) => sum + item.count, 0),
   });
 };
@@ -115,7 +192,7 @@ exports.getUpcomingDeadlines = async (req, res) => {
     const upcomingTasks = tasks.filter((task) => (task.deadlineDate - now) / (1000 * 60 * 60) <= 24);
 
     res.json({
-      tasks: upcomingTasks,
+      upcomingTasks: upcomingTasks,
       priorities: {
         low: upcomingTasks.filter((task) => task.priority === "low").length,
         medium: upcomingTasks.filter((task) => task.priority === "medium").length,
