@@ -26,7 +26,7 @@ exports.getUserWorkload = async (req, res) => {
   thisMonthDate.setDate(1);
   thisMonthDate.setHours(0, 0, 0, 0);
   const thisWeekDate = new Date(now);
-  thisWeekDate.setDate(now.getDate() - now.getDay());
+  thisWeekDate.setDate(now.getDate() - (now.getDay() - 1));
   thisWeekDate.setHours(0, 0, 0, 0);
 
   const thisDay = await Task.find({
@@ -115,10 +115,10 @@ exports.getAverageCompletionTime = async (req, res) => {
   res.json({ avgHoursToComplete: avg });
 };
 
-// 4.  Haftalık Tamamlanan Görev Sayısı
+// 4.  Haftalık Tamamlanan Görev Sayısı (Pazartesi-Pazar)
 exports.getCompletedTaskWeekly = async (req, res) => {
   const weekStart = new Date();
-  weekStart.setDate(weekStart.getDate() - 7);
+  weekStart.setDate(weekStart.getDate() - (new Date().getDay() - 1));
   weekStart.setHours(0, 0, 0, 0);
   const weekEnd = new Date();
   weekEnd.setHours(23, 59, 59, 999);
