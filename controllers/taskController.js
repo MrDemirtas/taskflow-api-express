@@ -14,7 +14,7 @@ exports.getTasks = async (req, res) => {
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(parseInt(limit))
-      .populate("project", "name")
+      .populate("project")
       .populate("owner", "name");
 
     const total = await Task.countDocuments(query);
@@ -67,7 +67,7 @@ exports.updateTask = async (req, res) => {
 
     if (!task) return res.status(404).json({ message: "Görev bulunamadı" });
 
-    const createdAt = task.createdAt;
+    const createdAt = new Date(task.createdAt);
     Object.assign(task, {
       ...req.body,
       dueDate: req.body.status === "done" ? new Date() : null,

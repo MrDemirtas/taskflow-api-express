@@ -111,8 +111,6 @@ module.exports = router;
  *                 default: 1
  *               project:
  *                 type: string
- *               owner:
- *                 type: string
  *     responses:
  *       201:
  *         description: Görev oluşturuldu
