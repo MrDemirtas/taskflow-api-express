@@ -68,16 +68,21 @@ exports.updateTask = async (req, res) => {
     if (!task) return res.status(404).json({ message: "Görev bulunamadı" });
 
     const createdAt = new Date(task.createdAt);
+    let deadlineDate = task.deadlineDate;
+    if (req.body.estimateHours) {
+      deadlineDate = new Date(createdAt.setHours(createdAt.getHours() + req.body.estimateHours));
+    }
+
     Object.assign(task, {
       ...req.body,
       dueDate: req.body.status === "done" ? new Date() : null,
-      deadlineDate: new Date(createdAt.setHours(createdAt.getHours() + req.body.estimateHours)),
+      deadlineDate,
     });
     await task.save();
 
     res.json(task);
   } catch (error) {
-    res.status(500).json({ message: "Görev güncellenme hatası" });
+    res.status(500).json({ message: "Görev güncellenme hatası", error });
   }
 };
 
