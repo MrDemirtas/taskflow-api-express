@@ -13,7 +13,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${process.env.PORT}`,
+        url: process.env.PROJECT_URL,
       },
     ],
     components: {
@@ -27,14 +27,14 @@ const options = {
     },
     security: [{ bearerAuth: [] }],
   },
-  apis: ["./routes/*.js", "./models/*.js"], // yorumları buradan tarar
+  apis: ["./routes/*.js", "./models/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 function swaggerDocs(app) {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-  console.log(`🔍 Swagger docs: http://localhost:${process.env.PORT}/api-docs`);
+  console.log(`🔍 Swagger docs: ${process.env.PROJECT_URL}/api-docs`);
 }
 
 module.exports = swaggerDocs;
