@@ -7,8 +7,8 @@ exports.getStatusDistribution = async (req, res) => {
     { $group: { _id: "$status", count: { $sum: 1 } } },
   ]);
   res.json({
-    status_distribution: stats,
-    total_count: stats.reduce((sum, item) => sum + item.count, 0),
+    statusDistribution: stats,
+    totalCount: stats.reduce((sum, item) => sum + item.count, 0),
   });
 };
 
@@ -35,7 +35,7 @@ exports.getAverageCompletionTime = async (req, res) => {
     ? (durations.reduce((sum, duration) => sum + duration, 0) / durations.length).toFixed(2)
     : 0;
 
-  res.json({ avg_hours_to_complete: avg });
+  res.json({ avgHoursToComplete: avg });
 };
 
 // 4.  Haftalık Tamamlanan Görev Sayısı
@@ -67,7 +67,7 @@ exports.getCompletedTaskWeekly = async (req, res) => {
 
   res.json({
     data,
-    weekly_count: data.reduce((sum, item) => sum + item.count, 0),
+    weeklyCount: data.reduce((sum, item) => sum + item.count, 0),
   });
 };
 
