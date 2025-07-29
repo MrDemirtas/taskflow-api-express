@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { register, login } = require("../controllers/authController");
+const { validateRegister, validateLogin } = require("../validations/auth");
 
-router.post("/register", register);
-router.post("/login", login);
+router.post("/register", validateRegister(), register);
+router.post("/login", validateLogin(), login);
 
 module.exports = router;
 
@@ -12,7 +13,8 @@ module.exports = router;
  * /api/auth/register:
  *   post:
  *     summary: Yeni kullanıcı oluşturur
- *     tags: [Auth]
+ *     tags:
+ *       - Auth
  *     requestBody:
  *       required: true
  *       content:
@@ -38,7 +40,8 @@ module.exports = router;
  * /api/auth/login:
  *   post:
  *     summary: Kullanıcı girişi yapar
- *     tags: [Auth]
+ *     tags:
+ *       - Auth
  *     requestBody:
  *       required: true
  *       content:

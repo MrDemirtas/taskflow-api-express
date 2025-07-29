@@ -6,15 +6,24 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "İsim gerekli"],
+      minlength: [3, "İsim en az 3 karakter olmalıdır"],
     },
     email: {
       type: String,
       required: [true, "Email gerekli"],
       unique: true,
+      validate: {
+        validator: function (v) {
+          return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+        },
+        message: "Lütfen geçerli bir email adresi giriniz",
+      },
+      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Lütfen geçerli bir email adresi giriniz"],
     },
     password: {
       type: String,
       required: [true, "Şifre gerekli"],
+      minlength: [6, "Şifre en az 6 karakter olmalıdır"],
     },
   },
   { timestamps: true }

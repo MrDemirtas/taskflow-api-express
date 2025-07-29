@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const { getTasks, createTask, updateTask, deleteTask } = require("../controllers/taskController");
-
+const { validateTaskQuery, validateTaskBodyPost, validateTaskBodyPut, validateTaskId } = require("../validations/task");
 const protect = require("../middleware/auth");
 
 router.use(protect);
 
-router.get("/", getTasks);
-router.post("/", createTask);
-router.put("/:id", updateTask);
-router.delete("/:id", deleteTask);
+router.get("/", validateTaskQuery(), getTasks);
+router.post("/", validateTaskBodyPost(), createTask);
+router.put("/:id", validateTaskBodyPut(), updateTask);
+router.delete("/:id", validateTaskId(), deleteTask);
 
 module.exports = router;
 
@@ -18,7 +18,8 @@ module.exports = router;
  * /api/tasks:
  *   get:
  *     summary: Tüm görevleri getirir
- *     tags: [Tasks]
+ *     tags:
+ *       - Tasks
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -78,7 +79,8 @@ module.exports = router;
  * /api/tasks:
  *   post:
  *     summary: Yeni görev oluşturur
- *     tags: [Tasks]
+ *     tags:
+ *       - Tasks
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -94,10 +96,6 @@ module.exports = router;
  *                 type: string
  *               description:
  *                 type: string
- *               status:
- *                 type: string
- *                 enum: [todo, in-progress, done]
- *                 default: todo
  *               priority:
  *                 type: string
  *                 enum: [low, medium, high]
@@ -123,7 +121,8 @@ module.exports = router;
  * /api/tasks/{id}:
  *   put:
  *     summary: Görevi günceller
- *     tags: [Tasks]
+ *     tags:
+ *       - Tasks
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -157,8 +156,6 @@ module.exports = router;
  *                 default: 1
  *               project:
  *                 type: string
- *               owner:
- *                 type: string
  *     responses:
  *       200:
  *         description: Görev güncellendi
@@ -175,7 +172,8 @@ module.exports = router;
  * /api/tasks/{id}:
  *   delete:
  *     summary: Görevi siler
- *     tags: [Tasks]
+ *     tags:
+ *       - Tasks
  *     security:
  *       - bearerAuth: []
  *     parameters:

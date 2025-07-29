@@ -1,4 +1,5 @@
 const Task = require("../models/Task");
+const calculatePercentage = require("../utils/calculatePercentage");
 
 // 1. Görev Durumu Dağılımı
 exports.getStatusDistribution = async (req, res) => {
@@ -71,32 +72,32 @@ exports.getUserWorkload = async (req, res) => {
         thisDay: {
           completed: thisDayCompleted,
           notCompleted: thisDayNotCompleted,
-          percentage: ((thisDayCompleted / thisDayNotCompleted) * 100).toFixed(2),
+          percentage: calculatePercentage(thisDayCompleted, thisDayNotCompleted),
           count: thisDayCompleted + thisDayNotCompleted,
         },
         thisWeek: {
           completed: thisWeekCompleted,
           notCompleted: thisWeekNotCompleted,
-          percentage: ((thisWeekCompleted / thisWeekNotCompleted) * 100).toFixed(2),
+          percentage: calculatePercentage(thisWeekCompleted, thisWeekNotCompleted),
           count: thisWeekCompleted + thisWeekNotCompleted,
         },
         thisMonth: {
           completed: thisMonthCompleted,
           notCompleted: thisMonthNotCompleted,
-          percentage: ((thisMonthCompleted / thisMonthNotCompleted) * 100).toFixed(2),
+          percentage: calculatePercentage(thisMonthCompleted, thisMonthNotCompleted),
           count: thisMonthCompleted + thisMonthNotCompleted,
         },
         thisYear: {
           completed: thisYearCompleted,
           notCompleted: thisYearNotCompleted,
-          percentage: ((thisYearCompleted / thisYearNotCompleted) * 100).toFixed(2),
+          percentage: calculatePercentage(thisYearCompleted, thisYearNotCompleted),
           count: thisYearCompleted + thisYearNotCompleted,
         },
       },
       total: {
         completed: totalCompleted,
         notCompleted: totalNotCompleted,
-        percentage: ((totalCompleted / totalNotCompleted) * 100).toFixed(2),
+        percentage: calculatePercentage(totalCompleted, totalNotCompleted),
         count: totalCompleted + totalNotCompleted,
       },
     });

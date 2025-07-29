@@ -31,7 +31,7 @@ exports.getTasks = async (req, res) => {
 };
 
 exports.createTask = async (req, res) => {
-  const { title, description, status, priority, estimateHours, project } = req.body;
+  const { title, description, priority, estimateHours, project } = req.body;
 
   try {
     const ownedProject = await Project.findOne({
@@ -46,10 +46,10 @@ exports.createTask = async (req, res) => {
     const task = await Task.create({
       title,
       description,
-      status,
+      status: "todo",
       priority,
       estimateHours,
-      dueDate: status === "done" ? new Date() : null,
+      dueDate: null,
       deadlineDate,
       project,
       owner: req.user._id,
