@@ -208,7 +208,7 @@ exports.getUpcomingDeadlines = async (req, res) => {
       owner: req.user._id,
       status: { $ne: "done" },
     })
-      .sort("estimateHours")
+      .sort("deadlineDate")
       .populate("project")
       .populate("owner", "name");
 
