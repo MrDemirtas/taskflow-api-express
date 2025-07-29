@@ -43,6 +43,7 @@ Projeyi yerel makinenizde kurmak için aşağıdaki adımları izleyin:
     PORT=5000
     MONGODB_URI=mongodb://localhost:27017/taskflow
     JWT_SECRET=gizli_anahtar
+    JWT_EXPIRE=1h
     PROJECT_URL=http://localhost:5000
     ```
 
