@@ -96,3 +96,9 @@ exports.validateProjectId = () => {
     },
   ];
 };
+
+exports.validTransitions = {
+  todo: ["in-progress"],
+  "in-progress": ["todo", "done"],
+  done: [],
+};

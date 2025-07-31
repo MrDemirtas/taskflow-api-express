@@ -1,5 +1,6 @@
 const Task = require("../models/Task");
 const Project = require("../models/Project");
+const { validTransitions } = require("../validations/project");
 
 exports.getTasks = async (req, res) => {
   const { status, priority, sort = "-createdAt", page = 1, limit = 10 } = req.query;
@@ -41,7 +42,7 @@ exports.createTask = async (req, res) => {
     if (!ownedProject) return res.status(400).json({ message: "Proje bulunamadı veya yetkisiz" });
 
     const now = new Date();
-    const deadlineDate = new Date(now.setHours(now.getHours() + estimateHours));
+    const deadlineDate = new Date(now).setHours(now.getHours() + estimateHours);
 
     const task = await Task.create({
       title,
@@ -67,10 +68,14 @@ exports.updateTask = async (req, res) => {
 
     if (!task) return res.status(404).json({ message: "Görev bulunamadı" });
 
+    if (!validTransitions[task.status].includes(req.body.status)) {
+      return res.status(400).json({ message: `Geçersiz durum geçişi ${task.status} -> ${req.body.status}` });
+    }
+
     const createdAt = new Date(task.createdAt);
     let deadlineDate = task.deadlineDate;
     if (req.body.estimateHours) {
-      deadlineDate = new Date(createdAt.setHours(createdAt.getHours() + req.body.estimateHours));
+      deadlineDate = new Date(createdAt).setHours(createdAt.getHours() + req.body.estimateHours);
     }
 
     Object.assign(task, {
